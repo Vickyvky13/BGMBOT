@@ -1,6 +1,7 @@
 import psutil
 import time
 import logging
+from InflexMusic import app as Client
 from pyrogram import filters
 from pyrogram.types import Message
 
@@ -31,8 +32,9 @@ def time_formatter(milliseconds):
 
     return tmp
 
-# Command handler function for the /checker command
-async def checker_handler(client, message: Message):
+# Define a command handler for the /checker command
+@Client.on_message(filters.command("checker"))
+async def activevc(_, message: Message):
     try:
         uptime = time_formatter((time.time() - start_time) * 1000)
         cpu = psutil.cpu_percent()
@@ -46,5 +48,4 @@ async def checker_handler(client, message: Message):
         await message.reply(TEXT)
 
     except Exception as e:
-        logger.error(f"An error occurred: {str(e)}")
         await message.reply(f"An error occurred: {str(e)}")
