@@ -51,7 +51,7 @@ async def activevc(_, message: Message):
 
         TEXT = (
             f"ᴜᴘᴛɪᴍᴇ : {uptime} | ᴄᴘᴜ : {cpu}\n"
-            f"ㅤ╰⊚ʀᴀᴍ : {ram}% |ᴀᴄᴛɪᴠᴇ ᴄʜᴀᴛ : {total_chats}"
+            f"ㅤ╰⊚ ʀᴀᴍ : {ram}% | ᴀᴄᴛɪᴠᴇ ᴄʜᴀᴛ : {total_chats}"
         )
         await message.reply(TEXT)
 
