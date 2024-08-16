@@ -50,10 +50,8 @@ async def activevc(_, message: Message):
         total_chats = (active_chats + active_video_chats) * 3
 
         TEXT = (
-            f"ᴜᴘᴛɪᴍᴇ : {uptime}\n"
-            f"ᴄᴘᴜ : {cpu}%\n"
-            f"ʀᴀᴍ : {ram}%\n"
-            f"Total Chats (Chats + Video Chats) * 3: {total_chats}"
+            f"ᴜᴘᴛɪᴍᴇ : {uptime} | ᴄᴘᴜ : {cpu}"
+            f"ㅤ╰⊚ʀᴀᴍ : {ram}% |ᴀᴄᴛɪᴠᴇ ᴄʜᴀᴛ : {total_chats}"
         )
         await message.reply(TEXT)
 
