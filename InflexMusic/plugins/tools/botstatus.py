@@ -56,10 +56,10 @@ async def activevc(_, message: Message):
             zero_count = 0  # Reset the counter if total_chats is not zero
 
         # Prepare the reply message
-        if zero_count >= 2:
+        if zero_count >= 5:
             TEXT = (
                 f"ᴜᴘᴛɪᴍᴇ : {uptime} | ᴄᴘᴜ : {cpu}\n"
-                f"ㅤ╰⊚ ʀᴀᴍ : {ram}% | ᴀᴄᴛɪᴠᴇ ᴄʜᴀᴛ : ip block"
+                f"ㅤ╰⊚ ʀᴀᴍ : {ram}% | ɪᴘ ʙʟᴏᴄᴋ 🚫"
             )
             zero_count = 0  # Reset the counter after sending the IP block message
         else:
