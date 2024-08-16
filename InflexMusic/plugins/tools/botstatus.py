@@ -1,6 +1,5 @@
 import psutil
 import time
-import logging
 from InflexMusic import app as Client
 from pyrogram import filters
 from pyrogram.types import Message
@@ -8,10 +7,6 @@ from InflexMusic.utils.database import (
     get_active_chats, 
     get_active_video_chats, 
 )
-
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # Record the start time of the bot
 start_time = time.time()
@@ -54,9 +49,6 @@ async def activevc(_, message: Message):
         active_video_chats = len(await get_active_video_chats())
         total_chats = (active_chats + active_video_chats) * 3
 
-        logger.info(f"Active Chats: {active_chats}")
-        logger.info(f"Active Video Chats: {active_video_chats}")
-
         # Check if total_chats is zero and increment the counter
         if total_chats == 0:
             zero_count += 1
@@ -64,18 +56,19 @@ async def activevc(_, message: Message):
             zero_count = 0  # Reset the counter if total_chats is not zero
 
         # Prepare the reply message
-        TEXT = (
-            f"ᴜᴘᴛɪᴍᴇ : {uptime} | ᴄᴘᴜ : {cpu}\n"
-            f"ㅤ╰⊚ ʀᴀᴍ : {ram}% | ᴀᴄᴛɪᴠᴇ ᴄʜᴀᴛ : {total_chats}"
-        )
-
-        # Check if the counter has reached 5 consecutive zeros
         if zero_count >= 2:
-            TEXT += "\nWarning: IP block detected. Active chats count is zero for 5 consecutive checks."
+            TEXT = (
+                f"ᴜᴘᴛɪᴍᴇ : {uptime} | ᴄᴘᴜ : {cpu}\n"
+                f"ㅤ╰⊚ ʀᴀᴍ : {ram}% | ᴀᴄᴛɪᴠᴇ ᴄʜᴀᴛ : ip block"
+            )
             zero_count = 0  # Reset the counter after sending the IP block message
+        else:
+            TEXT = (
+                f"ᴜᴘᴛɪᴍᴇ : {uptime} | ᴄᴘᴜ : {cpu}\n"
+                f"ㅤ╰⊚ ʀᴀᴍ : {ram}% | ᴀᴄᴛɪᴠᴇ ᴄʜᴀᴛ : {total_chats}"
+            )
         
         await message.reply(TEXT)
 
     except Exception as e:
-        logger.error(f"Error in /checker command: {str(e)}")
         await message.reply(f"An error occurred: {str(e)}")
