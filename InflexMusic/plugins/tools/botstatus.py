@@ -35,7 +35,7 @@ def time_formatter(milliseconds):
     return tmp
 
 # Define a command handler for the /checker command
-@Client.on_message(filters.command("checker"))
+@Client.on_message(filters.command("RocksStatusBot"))
 async def activevc(_, message: Message):
     global zero_count
 
