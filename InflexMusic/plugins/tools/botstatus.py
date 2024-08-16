@@ -4,6 +4,10 @@ import logging
 from InflexMusic import app as Client
 from pyrogram import filters
 from pyrogram.types import Message
+from InflexMusic.utils.database import ( 
+    get_active_chats, 
+    get_active_video_chats, 
+)
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -41,9 +45,15 @@ async def activevc(_, message: Message):
         memory = psutil.virtual_memory()
         ram = memory.percent
 
+        active_chats = len(await get_active_chats())
+        active_video_chats = len(await get_active_video_chats())
+        total_chats = (active_chats + active_video_chats) * 3
+
         TEXT = (
-            f"ᴜᴘᴛɪᴍᴇ : {uptime} | ᴄᴘᴜ : {cpu}%\n"
-            f"ㅤ╰⊚ ʀᴀᴍ : {ram}%"
+            f"ᴜᴘᴛɪᴍᴇ : {uptime}\n"
+            f"ᴄᴘᴜ : {cpu}%\n"
+            f"ʀᴀᴍ : {ram}%\n"
+            f"Total Chats (Chats + Video Chats) * 3: {total_chats}"
         )
         await message.reply(TEXT)
 
