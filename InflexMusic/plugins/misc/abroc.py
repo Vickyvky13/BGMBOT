@@ -7,7 +7,10 @@ from InflexMusic.utils.database import get_served_chats, get_served_users
 from InflexMusic.utils.decorators.language import language
 
 IS_BROADCASTING = False
-BROADCAST_INTERVAL = 5 * 60  # 3 hours in seconds
+BROADCAST_INTERVAL = 5 * 60  # 5 minutes in seconds
+
+# Global variable to hold the auto-broadcast task
+auto_broadcast_task = None
 
 async def broadcast_message(client, message, query=None, y=None, x=None):
     global IS_BROADCASTING
@@ -101,5 +104,20 @@ async def schedule_broadcast(client, message, _):
 @app.on_message(filters.command("abroadcast") & SUDOERS)
 @language
 async def start_auto_broadcast(client, message, _):
+    global auto_broadcast_task
+    if auto_broadcast_task is not None:
+        return await message.reply_text("Auto-broadcast is already running.")
+    
     await message.reply_text("Auto-broadcast started!")
-    asyncio.create_task(schedule_broadcast(client, message, _))
+    auto_broadcast_task = asyncio.create_task(schedule_broadcast(client, message, _))
+
+@app.on_message(filters.command("stopbroadcast") & SUDOERS)
+@language
+async def stop_auto_broadcast(client, message, _):
+    global auto_broadcast_task
+    if auto_broadcast_task is None:
+        return await message.reply_text("No auto-broadcast is currently running.")
+    
+    auto_broadcast_task.cancel()  # Cancel the task
+    auto_broadcast_task = None  # Reset the global variable
+    await message.reply_text("Auto-broadcast stopped!")
