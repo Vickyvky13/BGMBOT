@@ -1,8 +1,9 @@
 import os
 import re
-
+import random
 import aiofiles
 import aiohttp
+import numpy as np
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageOps, ImageFont
 from unidecode import unidecode
 from youtubesearchpython.__future__ import VideosSearch
@@ -10,7 +11,9 @@ from youtubesearchpython.__future__ import VideosSearch
 from InflexMusic import app
 from config import YOUTUBE_IMG_URL
 
-
+def make_col():
+    return (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+    
 def changeImageSize(maxWidth, maxHeight, image):
     widthRatio = maxWidth / image.size[0]
     heightRatio = maxHeight / image.size[1]
@@ -72,6 +75,19 @@ async def get_thumb(videoid):
         enhancer = ImageEnhance.Brightness(background)
         background = enhancer.enhance(0.5)
         logo = ImageOps.expand(sex, border=10, fill="white")
+        # changing logo color
+        im = logo
+        im = im.convert('RGBA')
+        color = make_col()
+
+        data = np.array(im)
+        red, green, blue, alpha = data.T
+
+        white_areas = (red == 255) & (blue == 255) & (green == 255)
+        data[..., :-1][white_areas.T] = color
+
+        im2 = Image.fromarray(data)
+        logo = im2
         background.paste(logo, (177, 120))
         draw = ImageDraw.Draw(background)
         arial = ImageFont.truetype("InflexMusic/assets/font2.ttf", 30)
