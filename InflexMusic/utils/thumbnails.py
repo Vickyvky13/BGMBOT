@@ -92,27 +92,13 @@ async def get_thumb(videoid):
         draw = ImageDraw.Draw(background)
         arial = ImageFont.truetype("InflexMusic/assets/font2.ttf", 30)
         font = ImageFont.truetype("InflexMusic/assets/font.ttf", 30)
-        line_length = 580  
-        text_x_position = 565
-    
-        red_length = int(line_length * 0.6)
-        white_length = line_length - red_length
-
-    
-        start_point_red = (text_x_position, 380)
-        end_point_red = (text_x_position + red_length, 380)
-        draw.line([start_point_red, end_point_red], fill="red", width=9)
-
-    
-        start_point_white = (text_x_position + red_length, 380)
-        end_point_white = (text_x_position + line_length, 380)
-        draw.line([start_point_white, end_point_white], fill="white", width=8)
-
-    
-        circle_radius = 10 
-        circle_position = (end_point_red[0], end_point_red[1])
-        draw.ellipse([circle_position[0] - circle_radius, circle_position[1] - circle_radius,
-                      circle_position[0] + circle_radius, circle_position[1] + circle_radius], fill="red")
+        
+        draw.ellipse(
+            [(918, 648), (942, 672)],
+            outline="white",
+            fill="red",
+            width=15,
+        )
         draw.text((1110, 8), unidecode(app.name), fill="white", font=arial)
         draw.text(
             (55, 560),
