@@ -1,12 +1,12 @@
 import os
 import re
-import textwrap
-import numpy as np
+
 import aiofiles
 import aiohttp
-from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter,
-                 ImageFont, ImageOps)
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageOps, ImageFont
+from unidecode import unidecode
 from youtubesearchpython.__future__ import VideosSearch
+
 from InflexMusic import app
 from config import YOUTUBE_IMG_URL
 
@@ -18,6 +18,15 @@ def changeImageSize(maxWidth, maxHeight, image):
     newHeight = int(heightRatio * image.size[1])
     newImage = image.resize((newWidth, newHeight))
     return newImage
+
+
+def clear(text):
+    list = text.split(" ")
+    title = ""
+    for i in list:
+        if len(title) + len(i) < 60:
+            title += " " + i
+    return title.strip()
 
 
 async def get_thumb(videoid):
@@ -51,67 +60,65 @@ async def get_thumb(videoid):
         async with aiohttp.ClientSession() as session:
             async with session.get(thumbnail) as resp:
                 if resp.status == 200:
-                    f = await aiofiles.open(
-                        f"cache/thumb{videoid}.png", mode="wb"
-                    )
+                    f = await aiofiles.open(f"cache/thumb{videoid}.png", mode="wb")
                     await f.write(await resp.read())
                     await f.close()
 
         youtube = Image.open(f"cache/thumb{videoid}.png")
-        image1 = changeImageSize(1280, 720, youtube)  
+        image1 = changeImageSize(1280, 720, youtube)
+        sex = changeImageSize(900, 380, youtube)
         image2 = image1.convert("RGBA")
-        background = image2.filter(filter=ImageFilter.BoxBlur(10))
+        background = image2.filter(filter=ImageFilter.BoxBlur(40))
         enhancer = ImageEnhance.Brightness(background)
-        background = enhancer.enhance(0.7)        
-        
+        background = enhancer.enhance(0.5)
+        logo = ImageOps.expand(sex, border=10, fill="white")
+        background.paste(logo, (177, 120))
         draw = ImageDraw.Draw(background)
-        font = ImageFont.truetype("InflexMusic/assets/font2.ttf", 30)
-        font2 = ImageFont.truetype("InflexMusic/assets/font2.ttf", 30)
         arial = ImageFont.truetype("InflexMusic/assets/font2.ttf", 30)
-        name_font = ImageFont.truetype("InflexMusic/assets/font.ttf", 30)
-        para = textwrap.wrap(title, width=32)
-        j = 0
+        font = ImageFont.truetype("InflexMusic/assets/font.ttf", 30)
+        draw.text((1110, 8), unidecode(app.name), fill="white", font=arial)
         draw.text(
-            (1065, 5), f"FALLEN MUSIC", fill="white", font=name_font
-        )
-
-        draw.text(
-            (50, 600),
-            f"{title[:40]}",
-            fill="white",
-            stroke_fill="white",
-            font=font,
-        )
-
-        draw.text(
-            (50, 565),
+            (55, 560),
             f"{channel} | {views[:23]}",
             (255, 255, 255),
             font=arial,
         )
-   
         draw.text(
-            (50, 640),
-            f"00:00",
+            (57, 600),
+            clear(title),
             (255, 255, 255),
-            stroke_width=1,
-            stroke_fill="white",
-            font=font2,
+            font=font,
+        )
+        draw.line(
+            [(55, 660), (1220, 660)],
+            fill="white",
+            width=5,
+            joint="curve",
+        )
+        draw.ellipse(
+            [(918, 648), (942, 672)],
+            outline="white",
+            fill="white",
+            width=15,
         )
         draw.text(
-            (1150, 640),
+            (36, 685),
+            "00:00",
+            (255, 255, 255),
+            font=arial,
+        )
+        draw.text(
+            (1185, 685),
             f"{duration[:23]}",
             (255, 255, 255),
-            stroke_width=1,
-            stroke_fill="white",
-            font=font2,
+            font=arial,
         )
-        draw.line((150,660, 1130,660), width=6, fill="white")
         try:
             os.remove(f"cache/thumb{videoid}.png")
         except:
             pass
         background.save(f"cache/{videoid}.png")
         return f"cache/{videoid}.png"
-    except Exception:
+    except Exception as e:
+        print(e)
         return YOUTUBE_IMG_URL
