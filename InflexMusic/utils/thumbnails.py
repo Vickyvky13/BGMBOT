@@ -93,7 +93,7 @@ async def get_thumb(videoid):
         arial = ImageFont.truetype("InflexMusic/assets/font2.ttf", 30)
         font = ImageFont.truetype("InflexMusic/assets/font.ttf", 30)
         line_length = 580  
-
+        text_x_position = 565
     
         red_length = int(line_length * 0.6)
         white_length = line_length - red_length
