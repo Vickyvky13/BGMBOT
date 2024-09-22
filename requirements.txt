@@ -25,3 +25,5 @@ unidecode
 yt-dlp
 youtube-search
 youtube-search-python
+Abg==1.2
+httpx[http2]
