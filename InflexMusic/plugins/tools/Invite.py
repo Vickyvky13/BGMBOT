@@ -1,45 +1,41 @@
-import psutil
-import time
-from InflexMusic import app as Client
+import random
 from pyrogram import filters
 from pyrogram.types import Message
+from unidecode import unidecode
+from InflexMusic import app
+from InflexMusic.misc import SUDOERS
+from InflexMusic.utils.database import (
+    get_active_chats, 
+    get_active_video_chats,
+    get_served_chats,
+    get_served_users
+)
 
 # Function to get the invite link of a chat
-async def get_invite_link(chat_id):
+async def get_invite_link(client, chat_id):
     try:
-        # Retrieve the chat information
-        chat = await Client.get_chat(chat_id)
-        
-        # If the chat already has an invite link, return it
-        if chat.invite_link:
-            return chat.invite_link
-        
-        # If the chat has a username, create a t.me link from the username
-        if chat.username:
-            return f"https://t.me/{chat.username}"
-        
-        # If no invite link exists, generate a new one
-        return await Client.export_chat_invite_link(chat_id)
+        # Generate invite link if it doesn't exist
+        invite_link = await client.get_chat(chat_id)
+        if not invite_link.invite_link:
+            invite_link = await client.export_chat_invite_link(chat_id)
+        return invite_link.invite_link
     except Exception as e:
-        print(f"Error: {e}")
-        return None
+        return str(e)
 
-# Command handler for /get
-@Client.on_message(filters.command("get", prefixes=["/"]) & filters.private)
-async def send_chat_link(client, message: Message):
-    # Check if a chat ID is provided
-    if len(message.command) == 2:
-        chat_id = message.command[1]
-        try:
-            # Get the invite link
-            link = await get_invite_link(chat_id)
-            
-            # Send the invite link if it exists
-            if link:
-                await message.reply(f"Here is the invite link for chat ID {chat_id}: {link}")
-            else:
-                await message.reply("Could not generate or find an invite link for this chat.")
-        except Exception as e:
-            await message.reply(f"An error occurred: {e}")
-    else:
-        await message.reply("Please provide a chat ID. Usage: /get <chat_id>")
+@app.on_message(filters.command(["getlink"]) & SUDOERS)
+async def get_group_link(client, message: Message):
+    try:
+        # Extract the chat ID from the message or reply
+        if message.reply_to_message:
+            chat_id = message.reply_to_message.chat.id
+        else:
+            chat_id = message.chat.id
+        
+        # Get the invite link for the chat
+        invite_link = await get_invite_link(client, chat_id)
+
+        # Send the invite link as a response to the user
+        await message.reply(f"Here is the invite link for the chat: {invite_link}")
+    
+    except Exception as e:
+        await message.reply(f"Error: {str(e)}")
