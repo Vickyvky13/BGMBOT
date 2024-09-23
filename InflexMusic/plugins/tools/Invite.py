@@ -14,11 +14,17 @@ from InflexMusic.utils.database import (
 # Function to get the invite link of a chat
 async def get_invite_link(client, chat_id):
     try:
-        # Generate invite link if it doesn't exist
-        invite_link = await client.get_chat(chat_id)
-        if not invite_link.invite_link:
+        # Fetch the chat first to ensure bot is in the chat
+        chat = await client.get_chat(chat_id)
+        
+        # Check if the bot has an existing invite link
+        if not chat.invite_link:
+            # Bot must be an admin to export invite links
             invite_link = await client.export_chat_invite_link(chat_id)
-        return invite_link.invite_link
+        else:
+            invite_link = chat.invite_link
+        return invite_link
+    
     except Exception as e:
         return str(e)
 
