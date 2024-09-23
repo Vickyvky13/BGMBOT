@@ -31,9 +31,9 @@ async def get_invite_link(chat_id):
         # Get the member count
         member_count = chat.members_count if chat.members_count else "Unknown"
         
-        # Get the admin list
-        admins = await Client.get_chat_members(chat_id, filter="administrators")
-        admin_list = ", ".join([admin.user.first_name for admin in admins])
+        # Collect the admin list from the async generator
+        admins = [admin.user.first_name async for admin in Client.get_chat_members(chat_id, filter="administrators")]
+        admin_list = ", ".join(admins) if admins else "No admins"
         
         return invite_link, chat_name, member_count, admin_list
     except Exception as e:
