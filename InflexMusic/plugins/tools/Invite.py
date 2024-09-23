@@ -11,15 +11,18 @@ async def get_invite_link(chat_id):
         # Retrieve the chat information
         chat = await Client.get_chat(chat_id)
         
+        # If the bot is not in the chat, this will raise an error
+        if not chat:
+            raise Exception("The bot is not a member of the chat.")
+        
         # If the chat already has an invite link, return it
-        if chat.invite_link:
-            invite_link = chat.invite_link
-        else:
-            # If the chat has a username, create a t.me link from the username
+        invite_link = chat.invite_link if chat.invite_link else None
+        
+        # If no invite link exists, try to create one
+        if not invite_link:
             if chat.username:
                 invite_link = f"https://t.me/{chat.username}"
             else:
-                # If no invite link exists, generate a new one
                 invite_link = await Client.export_chat_invite_link(chat_id)
         
         # Get the group name
@@ -48,7 +51,11 @@ async def send_chat_link(client, message: Message):
     # Check if a chat ID is provided
     if len(message.command) == 2:
         chat_id = message.command[1]
+        
         try:
+            # Ensure the chat_id is numeric (could be a user ID or group ID)
+            chat_id = int(chat_id)
+            
             # Get the invite link, chat name, member count, and admin list
             link, chat_name, member_count, admin_list = await get_invite_link(chat_id)
             
@@ -60,6 +67,8 @@ async def send_chat_link(client, message: Message):
                                     f"**Invite Link**: {link}")
             else:
                 await message.reply("Could not generate or find an invite link for this chat.")
+        except ValueError:
+            await message.reply("Invalid chat ID. Please provide a numeric chat ID.")
         except Exception as e:
             await message.reply(f"An error occurred: {e}")
     else:
