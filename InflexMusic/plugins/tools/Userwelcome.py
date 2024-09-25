@@ -15,8 +15,13 @@ async def welcome_new_member(client, message: Message):
         full_name = new_member.first_name or "User"
 
         # Try to get the user's profile picture (if any)
-        photos = await client.get_chat_photos(new_member.id)  # Use the correct method to fetch photos
-        profile_pic = photos[0].file_id if photos else None
+        photos = client.get_profile_photos(new_member.id)  # This returns an async generator
+        profile_pic = None
+
+        # Fetch the first available profile photo
+        async for photo in photos:
+            profile_pic = photo.file_id
+            break  # Get the first photo and stop the loop
 
         # Welcome message with HTML formatting
         welcome_text = (
