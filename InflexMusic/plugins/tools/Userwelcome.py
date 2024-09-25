@@ -14,13 +14,13 @@ async def welcome_new_member(client, message: Message):
         username = new_member.username or "No Username"
         full_name = new_member.first_name or "User"
 
-        # Welcome message with HTML formatting
+        # Welcome message with Markdown formatting
         welcome_text = (
-            f"Welcome to our <b>{group_name}</b> 🎉\n\n"
-            f"<b>User name</b>: {full_name}\n"
-            f"<b>Username</b>: @{username}\n"
-            f"<b>User ID</b>: <code>{user_id}</code>\n"
-            f"<b>Mention</b>: <a href='tg://user?id={user_id}'>{full_name}</a>"
+            f"Welcome to our *{group_name}* 🎉\n\n"
+            f"*User name*: {full_name}\n"
+            f"*Username*: @{username}\n"
+            f"*User ID*: `{user_id}`\n"
+            f"*Mention*: [Click here](tg://user?id={user_id})"
         )
 
         # Add a button that links to the group's username or any other URL
@@ -33,6 +33,6 @@ async def welcome_new_member(client, message: Message):
         # Send plain text welcome message (since profile picture is unavailable)
         await message.reply_text(
             text=welcome_text,
-            parse_mode="html",  # Try "html" instead of "HTML"
+            parse_mode="Markdown",  # Try Markdown for formatting
             reply_markup=button
         )
