@@ -33,6 +33,6 @@ async def welcome_new_member(client, message: Message):
         # Send plain text welcome message (since profile picture is unavailable)
         await message.reply_text(
             text=welcome_text,
-            parse_mode="HTML",  # Set HTML parse mode
+            parse_mode="html",  # Try "html" instead of "HTML"
             reply_markup=button
         )
