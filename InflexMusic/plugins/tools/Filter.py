@@ -89,9 +89,10 @@ video_chat_responses = [
 ]
 
 # Custom message when a user is invited to a video chat
-@app.on_message(filters.video_chat_participants_invited)
+@app.on_message(filters.group & filters.video_chat_started)
 async def video_chat_invite(client: Client, message):
-    invited_users = [user.first_name for user in message.video_chat_participants_invited.users]  # Get the invited users' first names
-    for user in invited_users:
-        response = random.choice(video_chat_responses).format(user=user)  # Choose a random response for each invited user
-        await message.reply_text(response)
+    if message.video_chat_participants_invited:
+        invited_users = [user.first_name for user in message.video_chat_participants_invited.users]  # Get the invited users' first names
+        for user in invited_users:
+            response = random.choice(video_chat_responses).format(user=user)  # Choose a random response for each invited user
+            await message.reply_text(response)
