@@ -14,7 +14,10 @@ responses = [
     "Howdy!"
 ]
 
-@app.on_message(filters.text & filters.command(["hi"]))
+# List of greetings to trigger the bot
+greetings = ["hi", "hello", "good morning"]
+
+@app.on_message(filters.text & filters.create(lambda _, __, message: any(greeting in message.text.lower() for greeting in greetings)))
 async def greet_user(client: Client, message):
     response = random.choice(responses)
     await message.reply_text(response)
