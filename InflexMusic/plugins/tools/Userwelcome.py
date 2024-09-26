@@ -103,41 +103,46 @@ async def get_my_id(client, message):
 # Event handler for new members joining the group
 @app.on_chat_member_updated()
 async def welcome_new_member(client, chat_member_updated):
-    # Check if the new chat member status is 'member', which indicates the user has joined
-    if chat_member_updated.new_chat_member.status == ChatMemberStatus.MEMBER and chat_member_updated.old_chat_member.status not in [ChatMemberStatus.MEMBER, ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR]:
-        new_member = chat_member_updated.new_chat_member.user
-        chat = chat_member_updated.chat
-        
-        welcome_text = f"""
+    new_member = chat_member_updated.new_chat_member.user
+    chat = chat_member_updated.chat
+
+    # Check if new member's status is 'member', indicating they joined the group
+    if chat_member_updated.new_chat_member.status == ChatMemberStatus.MEMBER:
+        # Handle cases where old_chat_member might be None (first-time join)
+        old_status = chat_member_updated.old_chat_member.status if chat_member_updated.old_chat_member else None
+
+        # Ensure the user wasn't already a member, admin, or owner before joining
+        if old_status not in [ChatMemberStatus.MEMBER, ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR]:
+            welcome_text = f"""
 <b>Welcome {new_member.mention} to {chat.title}!</b>
 
 We're glad to have you here! Please follow the group rules and enjoy your stay.
 """
 
-        # Fetch the user's profile photo if available
-        photo_id = new_member.photo.big_file_id if new_member.photo else None
-        button_url = f"https://t.me/{app.username}?startgroup=s&admin=delete_messages+manage_video_chats+pin_messages+invite_users"
-        
-        if photo_id:
-            # Download the profile photo
-            photo = await app.download_media(photo_id)
-            # Send the welcome message along with the user's profile photo
-            await client.send_photo(
-                chat.id,
-                photo=photo,
-                caption=welcome_text,
-                parse_mode=ParseMode.HTML,
-                reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton(text="Support Group", url=button_url)]
-                ])
-            )
-        else:
-            # Send the welcome message without a photo if the user has no profile picture
-            await client.send_message(
-                chat.id,
-                welcome_text,
-                parse_mode=ParseMode.HTML,
-                reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton(text="Support Group", url=button_url)]
-                ])
-            )
+            # Fetch the user's profile photo if available
+            photo_id = new_member.photo.big_file_id if new_member.photo else None
+            button_url = f"https://t.me/{app.username}?startgroup=s&admin=delete_messages+manage_video_chats+pin_messages+invite_users"
+            
+            if photo_id:
+                # Download the profile photo
+                photo = await app.download_media(photo_id)
+                # Send the welcome message along with the user's profile photo
+                await client.send_photo(
+                    chat.id,
+                    photo=photo,
+                    caption=welcome_text,
+                    parse_mode=ParseMode.HTML,
+                    reply_markup=InlineKeyboardMarkup([
+                        [InlineKeyboardButton(text="Support Group", url=button_url)]
+                    ])
+                )
+            else:
+                # Send the welcome message without a photo if the user has no profile picture
+                await client.send_message(
+                    chat.id,
+                    welcome_text,
+                    parse_mode=ParseMode.HTML,
+                    reply_markup=InlineKeyboardMarkup([
+                        [InlineKeyboardButton(text="Support Group", url=button_url)]
+                    ])
+                )
