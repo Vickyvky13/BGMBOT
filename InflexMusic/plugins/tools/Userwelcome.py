@@ -54,7 +54,7 @@ async def info_user(client, message):
             userinfo,
             parse_mode=ParseMode.HTML,
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton(text="Support Group", url=button_url)]
+                [InlineKeyboardButton(text="𝖠𝖽𝖽 𝖬𝖾 𝖨𝗇 𝖸𝗈𝗎𝗋 𝖦𝗋𝗈𝗎𝗉", url=button_url)]
             ])
         )
 
@@ -96,7 +96,7 @@ async def get_my_id(client, message):
         response_text,
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton(text="Support Group", url=button_url)]
+            [InlineKeyboardButton(text="𝖠𝖽𝖽 𝖬𝖾 𝖨𝗇 𝖸𝗈𝗎𝗋 𝖦𝗋𝗈𝗎𝗉", url=button_url)]
         ])
     )
 
@@ -142,7 +142,7 @@ async def welcome_new_member(client, chat_member_updated):
                     caption=welcome_text,
                     parse_mode=ParseMode.HTML,
                     reply_markup=InlineKeyboardMarkup([
-                        [InlineKeyboardButton(text="Support Group", url=button_url)]
+                        [InlineKeyboardButton(text="𝖠𝖽𝖽 𝖬𝖾 𝖨𝗇 𝖸𝗈𝗎𝗋 𝖦𝗋𝗈𝗎𝗉", url=button_url)]
                     ])
                 )
             else:
@@ -152,6 +152,6 @@ async def welcome_new_member(client, chat_member_updated):
                     welcome_text,
                     parse_mode=ParseMode.HTML,
                     reply_markup=InlineKeyboardMarkup([
-                        [InlineKeyboardButton(text="Support Group", url=button_url)]
+                        [InlineKeyboardButton(text="𝖠𝖽𝖽 𝖬𝖾 𝖨𝗇 𝖸𝗈𝗎𝗋 𝖦𝗋𝗈𝗎𝗉", url=button_url)]
                     ])
                 )
