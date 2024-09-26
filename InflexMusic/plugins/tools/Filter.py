@@ -2,53 +2,60 @@ from pyrogram import filters, Client
 import random
 from InflexMusic import app  # Assuming your bot client is initialized here
 
-# Set 1: Responses and greetings
+# Set 1: Responses and greetings (Updated with Tamil)
 responses_set_1 = [
-    "Hello!",
-    "Hey you!",
-    "Tata!",
-    "Hi there!",
-    "Greetings!",
-    "What's up?",
-    "Good to see you!",
-    "Howdy!"
+    "வணக்கம் டா மாப்ள",
+    "காலை வணக்கம் தங்கம் 🥰",
+    "Good morning my sweetheart",
+    "காலங்காத்தால உன்கிட்ட வா நான் குட் மார்னிங் மெசேஜ் வாங்கணும்",
+    "காலங்காத்தால இவன் மூஞ்சில முழிக்கிறவன் என்ன நடக்கப் போவதோ தெரியல",
+    "உன்கிட்ட யாரு பேசுவா குட் மார்னிங் மெசேஜ் போடுற",
+    "குட் மார்னிங் சொன்னது போதும் கிளம்பு",
+    "நீ எல்லாம் எதுக்குடா இருக்க எப்ப பார்த்தாலும் குட் மார்னிங் மெசேஜ் போட்டுக்கிட்டே இருக்கியே டா"
 ]
 
-greetings_set_1 = ["Good morning", "morning", "gm"]
+greetings_set_1 = ["Good morning", "morning", "gm", "காலை வணக்கம்"]
 
-# Set 2: Responses and greetings
+# Set 2: Responses and greetings (Updated with Tamil)
 responses_set_2 = [
-    "Good evening!",
-    "Hello there!",
-    "Evening!",
-    "What a pleasant evening!"
+    "போறேன் போறேன்னு சொல்ற ஆனா போக மாட்டேங்குறானே இங்கேயே தான் இருக்கான்",
+    "சொல்லிட்டு எல்லாம் கிளம்பு காத்து வரட்டும்",
+    "இவன் யாரவது கழுத்து புடிச்சு தள்ளி விடுங்களேன், போக மாட்டேங்குறான்",
+    "சொல்லிட்ட இல்ல கிளம்பு",
+    "மெசேஜ் பண்ணியது போதும் கிளம்பு",
+    "இப்ப இருந்து என்ன சாதிச்சிட்டா இப்ப நீங்க மெசேஜ் பண்ணிட்டு இருக்க",
+    "யோ குரூப் ஓனர் இவன முதல்ல ban அடங்கிய",
+    "நீயா போறியா இல்ல மூஞ்சில ஆசிட் அடிச்சு ஊத்தவா"
 ]
 
-greetings_set_2 = ["tata", "bye", "na pore"]
+greetings_set_2 = ["tata", "bye", "na pore", "போ", "டாடா"]
 
-# Set 3: Responses and greetings
+# Set 3: Responses and greetings (Updated with Tamil)
 responses_set_3 = [
-    "How are you?",
-    "Hope you're doing well!",
-    "Everything good?",
-    "How's it going?"
+    "சரி குட் நைட்",
+    "சரி சீக்கிரம் தூங்கப்போ. இங்க இருந்து என்ன கழட்ட போற",
+    "இவ்வளவு நேரம் இங்கே மெசேஜ் பண்ணி என்ன சாதித்து விட்டான் தெரியல தூங்க போறேன்",
+    "என்ன உன்னோட ஆள் கூப்பிடற ஆளா",
+    "எப்ப பாத்தாலும் தூங்கிக்கொண்டே போ",
+    "சரி சரி கெளம்பு மூஞ்சியும் மொகரையும் போ",
+    "தூங்கப் போற மூஞ்ச பாத்தியா"
 ]
 
-greetings_set_3 = ["good night", "😴", "gn"]
+greetings_set_3 = ["good night", "gn", "😴", "குட் நைட்", "தூங்க"]
 
-# Handler for Set 1
+# Handler for Set 1 (Good Morning Greetings)
 @app.on_message(filters.text & filters.create(lambda _, __, message: any(greeting in message.text.lower() for greeting in greetings_set_1)))
 async def greet_user_set_1(client: Client, message):
     response = random.choice(responses_set_1)
     await message.reply_text(response)
 
-# Handler for Set 2
+# Handler for Set 2 (Goodbye Messages)
 @app.on_message(filters.text & filters.create(lambda _, __, message: any(greeting in message.text.lower() for greeting in greetings_set_2)))
 async def greet_user_set_2(client: Client, message):
     response = random.choice(responses_set_2)
     await message.reply_text(response)
 
-# Handler for Set 3
+# Handler for Set 3 (Good Night Messages)
 @app.on_message(filters.text & filters.create(lambda _, __, message: any(greeting in message.text.lower() for greeting in greetings_set_3)))
 async def greet_user_set_3(client: Client, message):
     response = random.choice(responses_set_3)
