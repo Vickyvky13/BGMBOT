@@ -103,6 +103,9 @@ async def get_my_id(client, message):
 # Event handler for new members joining the group
 @app.on_chat_member_updated()
 async def welcome_new_member(client, chat_member_updated):
+    if not chat_member_updated.new_chat_member:
+        return  # Skip if new_chat_member is None
+
     new_member = chat_member_updated.new_chat_member.user
     chat = chat_member_updated.chat
 
