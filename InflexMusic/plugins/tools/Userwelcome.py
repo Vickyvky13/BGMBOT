@@ -114,15 +114,24 @@ async def welcome_new_member(client, chat_member_updated):
         # Ensure the user wasn't already a member, admin, or owner before joining
         if old_status not in [ChatMemberStatus.MEMBER, ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR]:
             welcome_text = f"""
-<b>Welcome {new_member.mention} to {chat.title}!</b>
+<b>Welcome to our {chat.title}!</b>
 
-We're glad to have you here! Please follow the group rules and enjoy your stay.
+<b><u>User Info</u></b>
+<b>User ID:</b> <code>{new_member.id}</code>
+<b>First Name:</b> ♮ {new_member.first_name}
+<b>Last Name:</b> {new_member.last_name if new_member.last_name else ""}
+<b>Username:</b> {"@" + new_member.username if new_member.username else ""}
+<b>Link:</b> {new_member.mention}
+<b>Status:</b> {get_user_status(new_member.status)}
+<b>DC ID:</b> <code>{new_member.dc_id}</code>
+<b>Premium:</b> <code>{new_member.is_premium}</code>
+<b>Language Code:</b> <code>{new_member.language_code}</code>
 """
 
             # Fetch the user's profile photo if available
             photo_id = new_member.photo.big_file_id if new_member.photo else None
             button_url = f"https://t.me/{app.username}?startgroup=s&admin=delete_messages+manage_video_chats+pin_messages+invite_users"
-            
+
             if photo_id:
                 # Download the profile photo
                 photo = await app.download_media(photo_id)
