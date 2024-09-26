@@ -14,7 +14,7 @@ responses_set_1 = [
     "Howdy!"
 ]
 
-greetings_set_1 = ["hi", "hello", "good morning"]
+greetings_set_1 = ["Good morning", "morning", "gm"]
 
 # Set 2: Responses and greetings
 responses_set_2 = [
