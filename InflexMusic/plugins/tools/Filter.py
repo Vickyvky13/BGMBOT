@@ -14,7 +14,7 @@ responses_set_1 = [
     "நீ எல்லாம் எதுக்குடா இருக்க எப்ப பார்த்தாலும் குட் மார்னிங் மெசேஜ் போட்டுக்கிட்டே இருக்கியே டா"
 ]
 
-greetings_set_1 = ["Good morning", "morning", "gm", "காலை வணக்கம்"]
+greetings_set_1 = ["Good morning", "morning", "gm", "காலை வணக்கம்", "invite"]
 
 # Set 2: Responses and greetings (Updated with Tamil)
 responses_set_2 = [
