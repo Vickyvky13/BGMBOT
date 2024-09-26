@@ -2,8 +2,8 @@ from pyrogram import filters, Client
 import random
 from InflexMusic import app  # Assuming your bot client is initialized here
 
-# List of random responses
-responses = [
+# Set 1: Responses and greetings
+responses_set_1 = [
     "Hello!",
     "Hey you!",
     "Tata!",
@@ -14,10 +14,42 @@ responses = [
     "Howdy!"
 ]
 
-# List of greetings to trigger the bot
-greetings = ["hi", "hello", "good morning"]
+greetings_set_1 = ["hi", "hello", "good morning"]
 
-@app.on_message(filters.text & filters.create(lambda _, __, message: any(greeting in message.text.lower() for greeting in greetings)))
-async def greet_user(client: Client, message):
-    response = random.choice(responses)
+# Set 2: Responses and greetings
+responses_set_2 = [
+    "Good evening!",
+    "Hello there!",
+    "Evening!",
+    "What a pleasant evening!"
+]
+
+greetings_set_2 = ["good evening", "evening"]
+
+# Set 3: Responses and greetings
+responses_set_3 = [
+    "How are you?",
+    "Hope you're doing well!",
+    "Everything good?",
+    "How's it going?"
+]
+
+greetings_set_3 = ["how are you", "how's it going", "what's up"]
+
+# Handler for Set 1
+@app.on_message(filters.text & filters.create(lambda _, __, message: any(greeting in message.text.lower() for greeting in greetings_set_1)))
+async def greet_user_set_1(client: Client, message):
+    response = random.choice(responses_set_1)
+    await message.reply_text(response)
+
+# Handler for Set 2
+@app.on_message(filters.text & filters.create(lambda _, __, message: any(greeting in message.text.lower() for greeting in greetings_set_2)))
+async def greet_user_set_2(client: Client, message):
+    response = random.choice(responses_set_2)
+    await message.reply_text(response)
+
+# Handler for Set 3
+@app.on_message(filters.text & filters.create(lambda _, __, message: any(greeting in message.text.lower() for greeting in greetings_set_3)))
+async def greet_user_set_3(client: Client, message):
+    response = random.choice(responses_set_3)
     await message.reply_text(response)
