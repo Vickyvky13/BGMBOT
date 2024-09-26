@@ -24,7 +24,7 @@ responses_set_2 = [
     "What a pleasant evening!"
 ]
 
-greetings_set_2 = ["good evening", "evening"]
+greetings_set_2 = ["tata", "bye", "na pore"]
 
 # Set 3: Responses and greetings
 responses_set_3 = [
