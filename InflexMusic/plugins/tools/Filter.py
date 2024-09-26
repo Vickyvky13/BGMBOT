@@ -60,3 +60,21 @@ async def greet_user_set_2(client: Client, message):
 async def greet_user_set_3(client: Client, message):
     response = random.choice(responses_set_3)
     await message.reply_text(response)
+
+# List of custom responses when a user leaves the group
+leave_responses = [
+    "போறான் பாரு! {user} நம்ம குரூப்ப விட்டு கிளம்பிட்டாரு!",
+    "படத்தில இருந்து கதாநாயகன் {user} வெளியேறி விட்டார்!",
+    "{user}, சரியாப் பாக்காம போறே!",
+    "{user} எனக்கா important நீ போயிட்டே!",
+    "போய் வா {user}, நெஞ்சம் நிம்மதியா இருக்கட்டும்!",
+    "போறேன் என்கிறான் {user}, இனி நம்ம குரூப்புக்கு கிடைக்க மாட்டான்!",
+    "{user} அவன் போயிடுவானு நெனச்சியா?"
+]
+
+# Custom message when a user leaves the group
+@app.on_message(filters.left_chat_member)
+async def user_left_group(client: Client, message):
+    user_name = message.left_chat_member.first_name  # Get the user's first name
+    response = random.choice(leave_responses).format(user=user_name)  # Choose a random response
+    await message.reply_text(response)
