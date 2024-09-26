@@ -13,7 +13,7 @@ async def welcome_new_member(client, message: Message):
         
         # Construct the welcome message
         welcome_message = (
-            f"Welcome to {group_name}\n\n"
+            f"Welcome to {group_name}!\n\n"
             f"**Name**: {user_mention}\n"
             f"**User ID**: `{user_id}`\n"
             f"**Username**: {username}"
@@ -33,7 +33,7 @@ async def welcome_new_member(client, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        "Vɪsɪᴛ",
+                        "Visit",
                         url="https://t.me/solotreee"
                     )
                 ]
