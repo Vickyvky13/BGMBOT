@@ -34,7 +34,7 @@ responses_set_3 = [
     "How's it going?"
 ]
 
-greetings_set_3 = ["how are you", "how's it going", "what's up"]
+greetings_set_3 = ["good night", "😴", "gn"]
 
 # Handler for Set 1
 @app.on_message(filters.text & filters.create(lambda _, __, message: any(greeting in message.text.lower() for greeting in greetings_set_1)))
