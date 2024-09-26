@@ -11,7 +11,7 @@ async def welcome_new_member(client, message: Message):
         user_id = new_member.id
         username = f"@{new_member.username}" if new_member.username else "No username"
         
-        # Construct the welcome message
+        # Construct the welcome message for the caption
         welcome_message = (
             f"Welcome to {group_name}!\n\n"
             f"**Name**: {user_mention}\n"
@@ -40,7 +40,7 @@ async def welcome_new_member(client, message: Message):
             ]
         )
 
-        # Send welcome message with user's profile picture or default photo
+        # Send welcome message with user's profile picture or text message if no profile photo is available
         if profile_photo:
             await message.reply_photo(
                 photo=profile_photo,
