@@ -1,32 +1,24 @@
 from pyrogram import filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from InflexMusic import app
-import random
-
-# List of welcome messages
-WELCOME_MESSAGES = [
-    "ʙᴇᴇᴘ ʙᴏᴏᴘ! ᴛʜᴇ ᴜsᴇʀ ʜᴀs ᴇɴᴛᴇʀᴇᴅ ᴛʜᴇ ᴄʜᴀᴛ. ᴡᴇʟᴄᴏᴍᴇ, {}!",
-    "ʜᴇʟʟᴏ, {}! ᴛʜʀɪʟʟᴇᴅ ᴛᴏ ʜᴀᴠᴇ ʏᴏᴜ ɪɴ ᴛʜᴇ ɢʀᴏᴜᴘ.",
-    "ᴀ ᴡᴀʀᴍ ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ᴏᴜʀ ɴᴇᴡᴇsᴛ ᴍᴇᴍʙᴇʀ! ʟᴇᴛ ᴛʜᴇ ғᴜɴ ʙᴇɢɪɴ, {}!",
-    "ɢʀᴇᴇᴛɪɴɢs! ɢʟᴀᴅ ʏᴏᴜ’ᴠᴇ ᴊᴏɪɴᴇᴅ ᴛʜᴇ ᴄᴏɴᴠᴇʀsᴀᴛɪᴏɴ, {}!",
-    "ᴡᴇʟᴄᴏᴍᴇ! ᴛʜᴇ ɢʀᴏᴜᴘ ᴊᴜsᴛ ɢᴏᴛ ʙᴇᴛᴛᴇʀ ᴡɪᴛʜ ʏᴏᴜ ʜᴇʀᴇ, {}.",
-    "ʜᴇʟʟᴏ! ʀᴇᴀᴅʏ ᴛᴏ ᴇɴᴊᴏʏ ᴛʜᴇ ɢʀᴏᴜᴘ, {}?",
-    "ᴡᴇʟᴄᴏᴍᴇ, {}! ᴡᴇ'ʀᴇ ᴇxᴄɪᴛᴇᴅ ᴛᴏ ʜᴀᴠᴇ ʏᴏᴜ ʜᴇʀᴇ.",
-]
-
-# List of goodbye messages
-GOODBYE_MESSAGES = [
-    "{} ʜᴀs ʟᴇғᴛ ᴛʜᴇ ᴄʜᴀᴛ. ғᴀʀᴇᴡᴇʟʟ!",
-    "ᴛʜᴀɴᴋ ʏᴏᴜ, {}. ɢᴏᴏᴅʙʏᴇ!",
-    "{} ʜᴀs ʟᴇғᴛ ᴜs. ᴡɪsʜɪɴɢ ʏᴏᴜ ᴀʟʟ ᴛʜᴇ ʙᴇsᴛ!",
-]
 
 @app.on_message(filters.new_chat_members)
 async def welcome_new_member(client, message: Message):
+    group_name = message.chat.title  # Get the group name
+
     for new_member in message.new_chat_members:
         user_mention = new_member.mention
-        random_welcome_message = random.choice(WELCOME_MESSAGES).format(user_mention)
+        user_id = new_member.id
+        username = f"@{new_member.username}" if new_member.username else "No username"
         
+        # Construct the welcome message
+        welcome_message = (
+            f"Welcome to {group_name}\n\n"
+            f"**Name**: {user_mention}\n"
+            f"**User ID**: `{user_id}`\n"
+            f"**Username**: {username}"
+        )
+
         # Fetch the user's profile picture
         try:
             photos = await client.get_profile_photos(new_member.id)
@@ -52,32 +44,16 @@ async def welcome_new_member(client, message: Message):
         if profile_photo:
             await message.reply_photo(
                 photo=profile_photo,
-                caption=random_welcome_message,
+                caption=welcome_message,
                 reply_markup=keyboard
             )
         else:
             await message.reply_text(
-                random_welcome_message,
+                welcome_message,
                 reply_markup=keyboard
             )
 
 @app.on_message(filters.left_chat_member)
 async def goodbye_member(client, message: Message):
-    user_mention = message.left_chat_member.mention
-    random_goodbye_message = random.choice(GOODBYE_MESSAGES).format(user_mention)
-    
-    keyboard = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(
-                    "Vɪsɪᴛ",
-                    url="https://t.me/solotreee"
-                )
-            ]
-        ]
-    )
-
-    await message.reply_text(
-        random_goodbye_message,
-        reply_markup=keyboard
-    )
+    # If you still need a goodbye message handler in the future, you can add it here.
+    pass
