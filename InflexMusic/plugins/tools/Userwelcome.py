@@ -89,7 +89,7 @@ async def welcome_new_member(client, chat_member_updated):
 
             # Fetch the user's profile photo if available
             photo_id = new_member.photo.big_file_id if new_member.photo else None
-            button_url = f"https://t.me/{app.username}?startgroup=s&admin=delete_messages+manage_video_chats+pin_messages+invite_users"
+            button_url = f"https://t.me/{app.username}?startgroup=s&admin=delete_messages+manage_video_chats+pin_messages+invite_users+ban_users"
 
             if photo_id:
                 photo = await app.download_media(photo_id)
@@ -140,7 +140,7 @@ async def info_user(client, message):
 """
 
     photo_id = user.photo.big_file_id if user.photo else None
-    button_url = f"https://t.me/{app.username}?startgroup=s&admin=delete_messages+manage_video_chats+pin_messages+invite_users"
+    button_url = f"https://t.me/{app.username}?startgroup=s&admin=delete_messages+manage_video_chats+pin_messages+invite_users+ban_users"
     if not photo_id:
         await m.delete()
         return await message.reply_text(
@@ -159,5 +159,36 @@ async def info_user(client, message):
         parse_mode=ParseMode.HTML,
         reply_markup=InlineKeyboardMarkup([
             [InlineKeyboardButton(text="Support Group", url=button_url)]
+        ])
+    )
+
+# Command handler to fetch group and user chat ID
+@app.on_message(filters.command("id"))
+async def get_ids(client, message):
+    chat_id = message.chat.id
+    user_id = message.from_user.id
+    response_text = f"**Chat ID:** `{chat_id}`\n**Your User ID:** `{user_id}`"
+    button_url = f"https://t.me/{app.username}?startgroup=s&admin=delete_messages+manage_video_chats+pin_messages+invite_users+ban_users"
+
+    await message.reply_text(
+        response_text,
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton(text="Support Group", url=button_url)]
+        ])
+    )
+
+# Command handler to fetch only the user chat ID
+@app.on_message(filters.command("myid"))
+async def get_my_id(client, message):
+    user_id = message.from_user.id
+    response_text = f"**Your User ID:** `{user_id}`"
+    button_url = f"https://t.me/{app.username}?startgroup=s&admin=delete_messages+manage_video_chats+pin_messages+invite_users+ban_users"
+
+    await message.reply_text(
+        response_text,
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton(text="𝖠𝖽𝖽 𝖬𝖾 𝖨𝗇 𝖸𝗈𝗎𝗋 𝖦𝗋𝗈𝗎𝗉", url=button_url)]
         ])
     )
