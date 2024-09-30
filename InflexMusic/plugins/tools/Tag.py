@@ -11,24 +11,27 @@ from InflexMusic import app
 async def tag_all_members(client: Client, message: Message):
     chat_id = message.chat.id
     from_user = message.from_user
-    
+
     # Check if the user has the appropriate permissions (administrator or owner)
     member = await client.get_chat_member(chat_id, from_user.id)
     if member.status not in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
         await message.reply("You must be an admin to use this command.")
         return
-    
+
+    # Get the custom message if provided
+    custom_message = message.text.split(" ", 1)[1] if len(message.text.split()) > 1 else ""
+
     # Fetch all members from the chat
     members = []
     async for member in app.get_chat_members(chat_id):
         if member.user.is_bot:
             continue
         members.append(member.user.mention)
-    
+
     # Split the members into batches of 5
     batch_size = 5
     for i in range(0, len(members), batch_size):
         tagged_members = " ".join(members[i:i + batch_size])
-        await message.reply(tagged_members)
+        final_message = f"{custom_message}\n\n{tagged_members}" if custom_message else tagged_members
+        await message.reply(final_message)
         await asyncio.sleep(2)  # Add a small delay between messages to avoid hitting rate limits
-
