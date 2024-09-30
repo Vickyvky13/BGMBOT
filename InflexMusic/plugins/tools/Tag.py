@@ -3,85 +3,32 @@ from pyrogram import filters, Client
 from pyrogram.types import Message
 from pyrogram.enums import ChatMemberStatus
 
-# Initialize your bot client (ensure you replace the correct app instance)
+# Assuming `app` is your initialized client from InflexMusic
 from InflexMusic import app 
 
-spam_chats = []
-
-# Command to tag all members in the group
-@app.on_message(filters.command(["tagall", "all"]) & filters.group)
-async def mention_all(client: Client, message: Message):
+# Command to tag all members in batches of 5
+@app.on_message(filters.command("tagall") & filters.group)
+async def tag_all_members(client: Client, message: Message):
     chat_id = message.chat.id
+    from_user = message.from_user
+    
+    # Check if the user has the appropriate permissions (administrator or owner)
+    member = await client.get_chat_member(chat_id, from_user.id)
+    if member.status not in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
+        await message.reply("You must be an admin to use this command.")
+        return
+    
+    # Fetch all members from the chat
+    members = []
+    async for member in app.get_chat_members(chat_id):
+        if member.user.is_bot:
+            continue
+        members.append(member.user.mention)
+    
+    # Split the members into batches of 5
+    batch_size = 5
+    for i in range(0, len(members), batch_size):
+        tagged_members = " ".join(members[i:i + batch_size])
+        await message.reply(tagged_members)
+        await asyncio.sleep(2)  # Add a small delay between messages to avoid hitting rate limits
 
-    # Check if the user is an admin
-    user_status = (await client.get_chat_member(chat_id, message.from_user.id)).status
-    if user_status not in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
-        return await message.reply_text("**Only admins can mention all!**")
-
-    # Handle cases where both text and reply message are given
-    if message.command and message.reply_to_message:
-        return await message.reply_text("**Give me only one argument!**")
-
-    # Handle command with argument
-    if message.command:
-        mode = "text_on_cmd"
-        msg = message.text.split(None, 1)[1] if len(message.command) > 1 else ""
-    # Handle reply case
-    elif message.reply_to_message:
-        mode = "text_on_reply"
-        msg = message.reply_to_message
-        if msg is None:
-            return await message.reply_text(
-                "**I can't mention members for older messages! (messages which were sent before I'm added to the group)**"
-            )
-    else:
-        return await message.reply_text("**Reply to a message or give me some text to mention others!**")
-
-    spam_chats.append(chat_id)
-    usrnum = 0
-    usrtxt = ""
-
-    # Iterating through chat members
-    async for usr in client.get_chat_members(chat_id):
-        if chat_id not in spam_chats:
-            break
-        usrnum += 1
-        usrtxt += f'<a href="tg://user?id={usr.user.id}">{usr.user.first_name}</a>, '
-
-        # Send message in chunks of 5 users
-        if usrnum == 5:
-            if mode == "text_on_cmd":
-                txt = f"{msg}\n{usrtxt}"
-                await client.send_message(chat_id, txt, parse_mode="html")  # Changed to "html"
-            elif mode == "text_on_reply":
-                await msg.reply_text(usrtxt, parse_mode="html")  # Changed to "html"
-            await asyncio.sleep(3)  # delay between batches
-            usrnum = 0
-            usrtxt = ""
-
-    # Remove chat from spam list after completion
-    try:
-        spam_chats.remove(chat_id)
-    except ValueError:
-        pass
-
-# Command to cancel tagging
-@app.on_message(filters.command("cancel") & filters.group)
-async def cancel_spam(client: Client, message: Message):
-    chat_id = message.chat.id
-
-    # Check if there is an ongoing process in the chat
-    if chat_id not in spam_chats:
-        return await message.reply_text("**There is no process ongoing...**")
-
-    # Check if user is an admin
-    user_status = (await client.get_chat_member(chat_id, message.from_user.id)).status
-    if user_status not in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
-        return await message.reply_text("**Only admins can execute this command!**")
-
-    # Cancel the mention process
-    try:
-        spam_chats.remove(chat_id)
-    except ValueError:
-        pass
-    return await message.reply_text("**Stopped mentioning users.**")
