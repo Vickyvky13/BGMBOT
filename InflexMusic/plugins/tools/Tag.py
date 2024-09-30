@@ -40,21 +40,21 @@ async def mention_all(client: Client, message: Message):
     spam_chats.append(chat_id)
     usrnum = 0
     usrtxt = ""
-    
+
     # Iterating through chat members
     async for usr in client.get_chat_members(chat_id):
         if chat_id not in spam_chats:
             break
         usrnum += 1
         usrtxt += f"[{usr.user.first_name}](tg://user?id={usr.user.id}), "
-        
+
         # Send message in chunks of 5 users
         if usrnum == 5:
             if mode == "text_on_cmd":
                 txt = f"{msg}\n{usrtxt}"
-                await client.send_message(chat_id, txt, parse_mode="markdown")
+                await client.send_message(chat_id, txt, parse_mode="markdown_v2")  # Updated here
             elif mode == "text_on_reply":
-                await msg.reply_text(usrtxt, parse_mode="markdown")
+                await msg.reply_text(usrtxt, parse_mode="markdown_v2")  # Updated here
             await asyncio.sleep(3)  # delay between batches
             usrnum = 0
             usrtxt = ""
@@ -69,7 +69,7 @@ async def mention_all(client: Client, message: Message):
 @app.on_message(filters.command("cancel") & filters.group)
 async def cancel_spam(client: Client, message: Message):
     chat_id = message.chat.id
-    
+
     # Check if there is an ongoing process in the chat
     if chat_id not in spam_chats:
         return await message.reply_text("**There is no process ongoing...**")
@@ -85,4 +85,3 @@ async def cancel_spam(client: Client, message: Message):
     except ValueError:
         pass
     return await message.reply_text("**Stopped mentioning users.**")
-
