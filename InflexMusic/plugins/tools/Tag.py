@@ -46,15 +46,15 @@ async def mention_all(client: Client, message: Message):
         if chat_id not in spam_chats:
             break
         usrnum += 1
-        usrtxt += f"[{usr.user.first_name}](tg://user?id={usr.user.id}), "
+        usrtxt += f"<a href='tg://user?id={usr.user.id}'>{usr.user.first_name}</a>, "
 
         # Send message in chunks of 5 users
         if usrnum == 5:
             if mode == "text_on_cmd":
                 txt = f"{msg}\n{usrtxt}"
-                await client.send_message(chat_id, txt, parse_mode="markdown_v2")  # Updated here
+                await client.send_message(chat_id, txt, parse_mode="html")  # Changed to "html"
             elif mode == "text_on_reply":
-                await msg.reply_text(usrtxt, parse_mode="markdown_v2")  # Updated here
+                await msg.reply_text(usrtxt, parse_mode="html")  # Changed to "html"
             await asyncio.sleep(3)  # delay between batches
             usrnum = 0
             usrtxt = ""
