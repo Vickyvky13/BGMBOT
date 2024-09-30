@@ -32,6 +32,6 @@ async def tag_all_members(client: Client, message: Message):
     batch_size = 10
     for i in range(0, len(members), batch_size):
         tagged_members = " ".join(members[i:i + batch_size])
-        final_message = f"{custom_message}\n\n{tagged_members}" if custom_message else tagged_members
+        final_message = f"||{custom_message}||\n\n{tagged_members}" if custom_message else tagged_members
         await message.reply(final_message)
         await asyncio.sleep(5)  # Add a small delay between messages to avoid hitting rate limits
