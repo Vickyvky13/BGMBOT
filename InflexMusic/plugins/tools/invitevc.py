@@ -14,9 +14,9 @@ QUOTES = [
 ]
 
 # Function to send a random quote when a user is invited to a video chat
-@app.on_message(filters.video_chat_participants_invited)
+@app.on_message(filters.group)
 async def welcome_user(client, message):
-    # Check if any users were invited to the video chat
+    # Check if the message contains video chat participants invited service
     if message.video_chat_participants_invited:
         # Loop through invited users
         for invited_user in message.video_chat_participants_invited.users:
