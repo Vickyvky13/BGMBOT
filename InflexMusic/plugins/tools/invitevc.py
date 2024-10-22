@@ -7,15 +7,19 @@ import config
 # Define the filter for video chat members being invited
 @app.on_message(filters.video_chat_members_invited)
 async def video_chat_members_invited_handler(client, message):
-    # Check if the message contains users invited to the video chat
-    if message.video_chat_members_invited:
-        invited_participants = message.video_chat_members_invited.users
-        # Iterate through the invited users
-        for user in invited_participants:
-            if user.is_self:
-                # Check the type of the user who invited the bot
-                inviter = message.from_user
+    # The invited members can be accessed from message.video_chat_members_invited
+    invited = message.video_chat_members_invited
+
+    if invited:
+        # Iterate through invited users to check if the bot was invited
+        for user in invited.users:
+            if user.is_self:  # Check if the bot is among the invited users
+                inviter = message.from_user  # Get the user who sent the invite
+
+                # Check if the inviter is an admin
                 user_type = "admin" if inviter.is_admin else "regular user"
+
+                # Reply with a random message and mention the inviter
                 await message.reply_text(
                     random.choice([
                         f"Hey, {inviter.mention}, you've invited me to the video chat as a {user_type}!",
