@@ -1,7 +1,6 @@
 import random
 from pyrogram import filters
 from pyrogram.enums import ParseMode
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from InflexMusic import app
 import config
 
@@ -14,24 +13,21 @@ QUOTES = [
     "Success usually comes to those who are too busy to be looking for it."
 ]
 
-# Function to send a random quote when a user joins a video chat
-@app.on_message(filters.video_chat_started)
+# Function to send a random quote when a user is invited to a video chat
+@app.on_message(filters.video_chat_participants_invited)
 async def welcome_user(client, message):
-    # Check if the user is joining the video chat
-    if message.video_chat_started:
-        # Get the user who joined
-        user = message.from_user
-        # Generate a random quote
-        random_quote = random.choice(QUOTES)
+    # Check if any users were invited to the video chat
+    if message.video_chat_participants_invited:
+        # Loop through invited users
+        for invited_user in message.video_chat_participants_invited.users:
+            # Generate a random quote
+            random_quote = random.choice(QUOTES)
 
-        # Create a welcome message with a random quote
-        welcome_message = f"Welcome, {user.first_name}! Here's a quote for you:\n\n{random_quote}"
+            # Create a welcome message with a random quote
+            welcome_message = f"Welcome, {invited_user.first_name}! Here's a quote for you:\n\n{random_quote}"
 
-        # Send the welcome message to the chat
-        await message.reply_text(
-            welcome_message,
-            reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Join Video Chat", url="https://t.me/YourVideoChatLink")]]
-            ),
-            parse_mode=ParseMode.MARKDOWN
-        )
+            # Send the welcome message to the chat
+            await message.reply_text(
+                welcome_message,
+                parse_mode=ParseMode.MARKDOWN
+            )
