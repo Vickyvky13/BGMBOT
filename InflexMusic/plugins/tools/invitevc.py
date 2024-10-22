@@ -13,11 +13,11 @@ QUOTES = [
     "Success usually comes to those who are too busy to be looking for it."
 ]
 
-# Function to send a random quote when a user is invited to a video chat
-@app.on_message(filters.group)
+# Function to send a random quote when users are invited to a video chat
+@app.on_message(filters.group)  # Filter for group messages
 async def welcome_user(client, message):
-    # Check if the message has the 'video_chat_participants_invited' attribute
-    if message.service and hasattr(message, 'video_chat_participants_invited') and message.video_chat_participants_invited:
+    # Check if the message has the video_chat_participants_invited attribute
+    if message.video_chat_participants_invited:
         # Loop through invited users
         for invited_user in message.video_chat_participants_invited.users:
             # Generate a random quote
