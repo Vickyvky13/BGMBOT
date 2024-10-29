@@ -44,8 +44,9 @@ async def auto_broadcast():
 
 async def start_auto_broadcast():
     """Starts the auto-broadcast as part of the app initialization."""
-    await app.start()  # Ensure the app is started
-    asyncio.create_task(auto_broadcast())  # Start the auto-broadcast task
+    asyncio.create_task(auto_broadcast())  # Schedule the broadcast task without awaiting it
 
-# Schedule the auto-broadcast task to run when the module is imported
-asyncio.get_event_loop().run_until_complete(start_auto_broadcast())
+# Start the auto-broadcast when the app starts
+@app.on_startup
+async def on_startup():
+    await start_auto_broadcast()
