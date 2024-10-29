@@ -1,6 +1,6 @@
 import asyncio
 
-from pyrogram import filters
+from pyrogram import Client, filters
 from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import FloodWait
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -40,13 +40,12 @@ async def auto_broadcast():
             pass
 
         # Wait for 5 minutes before the next broadcast
-        await asyncio.sleep(120)
+        await asyncio.sleep(300)
 
 async def start_auto_broadcast():
-    """Ensure the auto-broadcast runs once when the bot starts."""
-    await auto_broadcast()
+    """Starts the auto-broadcast as part of the app initialization."""
+    await app.start()  # Ensure the app is started
+    asyncio.create_task(auto_broadcast())  # Start the auto-broadcast task
 
-# Start the auto-broadcast task when the app starts
-app.start()
-asyncio.get_event_loop().create_task(start_auto_broadcast())
-app.idle()
+# Schedule the auto-broadcast task to run when the module is imported
+asyncio.get_event_loop().run_until_complete(start_auto_broadcast())
