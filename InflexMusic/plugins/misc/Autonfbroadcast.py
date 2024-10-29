@@ -31,14 +31,7 @@ quotes = [
     "𝗕𝗘𝗖𝗔𝗨𝗦𝗘 𝗟𝗢𝗩𝗘 𝗜𝗦 𝗠𝗨𝗦𝗜𝗖, 𝗔𝗡𝗗 𝗠𝗨𝗦𝗜𝗖 𝗜𝗦 𝗟𝗢𝗩𝗘. 🎵 𝗣𝗟𝗔𝗬 𝗪𝗜𝗧𝗛 {app.mention}."
 ]
 
-
-
 IS_BROADCASTING = False
-
-async def get_served_chats():
-    # Replace this function with actual implementation
-    # This should return a list of chats with the format [{"chat_id": chat_id}, ...]
-    pass
 
 async def auto_broadcast():
     global IS_BROADCASTING
@@ -51,11 +44,11 @@ async def auto_broadcast():
     while True:
         sent = 0
         schats = await get_served_chats()
-
+        
         for chat in schats:
-            # Select a random quote and format it with the app's mention
-            message_text = random.choice(quotes).replace("{app_mention}", app.mention)
-
+            # Select a random quote from the quotes list
+            message_text = random.choice(quotes)
+            
             try:
                 await app.send_message(chat["chat_id"], text=message_text, reply_markup=keyboard)
                 sent += 1
@@ -65,17 +58,16 @@ async def auto_broadcast():
                 if flood_time > 200:
                     continue
                 await asyncio.sleep(flood_time)
-            except Exception as e:
-                print(f"Error sending message: {e}")
+            except:
                 continue
-
+        
         try:
             print(f"Broadcast sent to {sent} chats.")
-        except Exception as e:
-            print(f"Error printing broadcast summary: {e}")
+        except:
+            pass
 
         # Wait for 5 minutes before the next broadcast
-        await asyncio.sleep(120)  # 300 seconds = 5 minutes
+        await asyncio.sleep(300)  # Change to 300 seconds (5 minutes)
 
-# Assume `app` is your pyrogram Client instance
+# Start the auto-broadcast function
 app.add_handler(asyncio.create_task(auto_broadcast()))
