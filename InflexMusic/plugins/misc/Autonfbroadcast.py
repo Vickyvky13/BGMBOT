@@ -40,7 +40,7 @@ async def auto_broadcast():
             pass
 
         # Wait for 5 minutes before the next broadcast
-        await asyncio.sleep(300)
+        await asyncio.sleep(120)
 
 async def start_auto_broadcast():
     """Ensure the auto-broadcast runs once when the bot starts."""
