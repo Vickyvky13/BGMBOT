@@ -75,7 +75,7 @@ async def auto_broadcast():
             print(f"Error printing broadcast summary: {e}")
 
         # Wait for 5 minutes before the next broadcast
-        await asyncio.sleep(300)  # 300 seconds = 5 minutes
+        await asyncio.sleep(120)  # 300 seconds = 5 minutes
 
 # Assume `app` is your pyrogram Client instance
 app.add_handler(asyncio.create_task(auto_broadcast()))
