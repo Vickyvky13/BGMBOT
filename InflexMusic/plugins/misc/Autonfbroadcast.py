@@ -1,11 +1,10 @@
 import asyncio
-
 from pyrogram import Client, filters
 from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import FloodWait
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from InflexMusic import app
+from InflexMusic import app  # Assuming this is your Pyrogram Client instance
 from InflexMusic.utils.database import get_served_chats
 
 IS_BROADCASTING = False
@@ -42,11 +41,11 @@ async def auto_broadcast():
         # Wait for 5 minutes before the next broadcast
         await asyncio.sleep(300)
 
-async def start_auto_broadcast():
-    """Starts the auto-broadcast as part of the app initialization."""
-    asyncio.create_task(auto_broadcast())  # Schedule the broadcast task without awaiting it
+async def start_bot():
+    """Start the Pyrogram Client and auto-broadcast task."""
+    await app.start()  # Start the Pyrogram app (Client)
+    asyncio.create_task(auto_broadcast())  # Start the auto-broadcast task in the event loop
+    await app.wait()  # Wait for the app to keep running
 
-# Start the auto-broadcast when the app starts
-@app.on_startup
-async def on_startup():
-    await start_auto_broadcast()
+# Run the bot startup task in the event loop
+asyncio.run(start_bot())
