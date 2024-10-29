@@ -42,5 +42,11 @@ async def auto_broadcast():
         # Wait for 5 minutes before the next broadcast
         await asyncio.sleep(300)
 
-# Start the auto-broadcast function
-app.add_handler(asyncio.create_task(auto_broadcast()))
+async def start_auto_broadcast():
+    """Ensure the auto-broadcast runs once when the bot starts."""
+    await auto_broadcast()
+
+# Start the auto-broadcast task when the app starts
+app.start()
+asyncio.get_event_loop().create_task(start_auto_broadcast())
+app.idle()
