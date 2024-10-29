@@ -95,7 +95,7 @@ async def auto_broadcast():
             pass
 
         # Wait for 5 minutes before the next broadcast
-        await asyncio.sleep(300)  # Change to 300 seconds (5 minutes)
+        await asyncio.sleep(120)  # Change to 300 seconds (5 minutes)
 
 # Start the auto-broadcast function
 app.add_handler(asyncio.create_task(auto_broadcast()))
