@@ -1,8 +1,10 @@
 import config
 import math
 
-from pyrogram.types import InlineKeyboardButton, WebAppInfo
+from pyrogram.types import InlineKeyboardButton
+
 from InflexMusic.utils.formatters import time_to_seconds
+
 
 def track_markup(_, videoid, user_id, channel, fplay):
     buttons = [
@@ -19,7 +21,7 @@ def track_markup(_, videoid, user_id, channel, fplay):
         [
             InlineKeyboardButton(
                 text=_["CLOSE_BUTTON"],
-                callback_data=f"forceclose {videoid}|{user_id}",
+                url="http://t.me/BgmDarkBot/SoloTree"
             )
         ],
     ]
@@ -63,9 +65,7 @@ def stream_markup_timer(_, chat_id, played, dur):
             InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_GROUP),
         ],
         [
-            InlineKeyboardButton(
-                text=_["S_B_5"], web_app=WebAppInfo(url="https://t.me/BgmDarkBot/SoloTree")
-            )
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], url="http://t.me/BgmDarkBot/SoloTree")
         ],
     ]
     return buttons
@@ -74,14 +74,13 @@ def stream_markup_timer(_, chat_id, played, dur):
 def stream_markup(_, chat_id):
     buttons = [
         [
-            InlineKeyboardButton(text=_["S_B_6"], url="http://t.me/BgmDarkBot/SoloTree"),
-            InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_CHANNEL),
+            InlineKeyboardButton(text=_["S_B_6"], url=config.SUPPORT_CHANNEL),
+            InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_GROUP),
         ],
         [
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], url="http://t.me/BgmDarkBot/SoloTree")
         ],
     ]
-    return buttons
     return buttons
 
 
@@ -100,7 +99,7 @@ def playlist_markup(_, videoid, user_id, ptype, channel, fplay):
         [
             InlineKeyboardButton(
                 text=_["CLOSE_BUTTON"],
-                callback_data=f"forceclose {videoid}|{user_id}",
+                url="http://t.me/BgmDarkBot/SoloTree"
             ),
         ],
     ]
@@ -118,7 +117,7 @@ def livestream_markup(_, videoid, user_id, mode, channel, fplay):
         [
             InlineKeyboardButton(
                 text=_["CLOSE_BUTTON"],
-                callback_data=f"forceclose {videoid}|{user_id}",
+                url="http://t.me/BgmDarkBot/SoloTree"
             ),
         ],
     ]
@@ -145,7 +144,7 @@ def slider_markup(_, videoid, user_id, query, query_type, channel, fplay):
             ),
             InlineKeyboardButton(
                 text=_["CLOSE_BUTTON"],
-                callback_data=f"forceclose {query}|{user_id}",
+                url="http://t.me/BgmDarkBot/SoloTree"
             ),
             InlineKeyboardButton(
                 text="▷",
