@@ -52,23 +52,23 @@ def stream_markup_timer(_, chat_id, played, dur):
     else:
         bar = "—————————⌯"
     buttons = [
-    [
-        InlineKeyboardButton(
-            text=f"{played} {bar} {dur}",
-            callback_data="GetTimer",
-        )
-    ],
-    [
-        InlineKeyboardButton(text=_["S_B_6"], url=config.SUPPORT_CHANNEL),
-        InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_GROUP),
-    ],
-    [
-        InlineKeyboardButton(
-            text=_["S_B_5"], web_app=WebAppInfo(url="https://solotree.in")
-        )
-    ],
-]
-return buttons
+        [
+            InlineKeyboardButton(
+                text=f"{played} {bar} {dur}",
+                callback_data="GetTimer",
+            )
+        ],
+        [
+            InlineKeyboardButton(text=_["S_B_6"], url=config.SUPPORT_CHANNEL),
+            InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_GROUP),
+        ],
+        [
+            InlineKeyboardButton(
+                text=_["S_B_5"], web_app=WebAppInfo(url="https://solotree.in")
+            )
+        ],
+    ]
+    return buttons
 
 
 def stream_markup(_, chat_id):
