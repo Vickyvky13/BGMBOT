@@ -74,11 +74,14 @@ def stream_markup_timer(_, chat_id, played, dur):
 def stream_markup(_, chat_id):
     buttons = [
         [
-            InlineKeyboardButton(text=_["S_B_6"], url=config.SUPPORT_CHANNEL),
-            InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_GROUP),
+            InlineKeyboardButton(text=_["S_B_6"], url="http://t.me/BgmDarkBot/SoloTree"),
+            InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_CHANNEL),
         ],
-        [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
+        [
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")
+        ],
     ]
+    return buttons
     return buttons
 
 
