@@ -64,7 +64,7 @@ def stream_markup_timer(_, chat_id, played, dur):
         ],
         [
             InlineKeyboardButton(
-                text=_["S_B_5"], web_app=WebAppInfo(url="https://solotree.in")
+                text=_["S_B_5"], web_app=WebAppInfo(url="http://t.me/BgmDarkBot/SoloTree")
             )
         ],
     ]
